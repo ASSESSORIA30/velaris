@@ -930,6 +930,16 @@
     letter-spacing: 0.25em;
     text-transform: uppercase;
     color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+
+  .footer-meta a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .footer-meta a:hover {
+    color: var(--text);
   }
 
   /* Reveal animation */
@@ -1296,7 +1306,7 @@
           <p class="form-subtitle">Toda información compartida es estrictamente confidencial.</p>
         </div>
 
-        <form id="velaris-form">
+        <form id="velaris-form" action="https://formspree.io/f/mvznepzv" method="POST">
           <div class="form-row">
             <div class="field">
               <label>Nombre</label>
@@ -1355,6 +1365,8 @@
       <div class="footer-logo">VELARIS</div>
       <div class="footer-sub">Luxury Homes</div>
       <p class="footer-tag">Design · Elegance · Exclusivity</p>
+      <p class="footer-meta">Velaris es una empresa de <a href="https://www.modualrdomgrup.com" target="_blank" rel="noopener noreferrer">MD Group</a></p>
+      <p class="footer-meta">Web realizada por <a href="https://www.skytopdigital.com" target="_blank" rel="noopener noreferrer">SkyTop Digital</a></p>
       <p class="footer-meta">© 2026 Velaris · Todos los derechos reservados</p>
     </div>
   </footer>
@@ -1406,14 +1418,8 @@
 
   // Form
   document.getElementById('velaris-form').addEventListener('submit', (e) => {
-    e.preventDefault();
     const btn = e.target.querySelector('button[type="submit"] span');
     btn.textContent = 'Enviando...';
-    setTimeout(() => {
-      btn.textContent = 'Solicitud recibida ✓';
-      e.target.reset();
-      setTimeout(() => { btn.textContent = 'Enviar solicitud →'; }, 3000);
-    }, 800);
   });
 </script>
 
