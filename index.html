@@ -1025,8 +1025,8 @@
 
   <!-- HERO -->
   <section class="hero">
-    <video class="hero-video" muted loop playsinline preload="none" poster="assets/villa-atardecer.png" aria-hidden="true">
-      <source data-src="assets/video-velaris.mp4" type="video/mp4">
+    <video class="hero-video" muted loop playsinline autoplay preload="metadata" poster="assets/villa-atardecer.png" aria-hidden="true">
+      <source src="assets/video-velaris.mp4" type="video/mp4">
     </video>
     <div class="hero-overlay"></div>
     <div class="hero-content">
@@ -1374,29 +1374,16 @@
 </main>
 
 <script>
-  // Non-blocking hero video load
+  // Hero video: carga inmediata y reproducción automática
   const heroVideo = document.querySelector('.hero-video');
-  const heroSource = heroVideo ? heroVideo.querySelector('source') : null;
 
-  function loadHeroVideo() {
-    if (!heroVideo || !heroSource || heroSource.src) return;
-    heroSource.src = heroSource.dataset.src;
-    heroVideo.load();
-    const playWhenReady = () => {
+  if (heroVideo) {
+    heroVideo.addEventListener('canplay', () => {
       heroVideo.classList.add('loaded');
-      const playPromise = heroVideo.play();
-      if (playPromise) playPromise.catch(() => {});
-    };
-    heroVideo.addEventListener('canplay', playWhenReady, { once: true });
-  }
+    }, { once: true });
 
-  window.addEventListener('load', () => {
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(loadHeroVideo, { timeout: 1200 });
-    } else {
-      setTimeout(loadHeroVideo, 350);
-    }
-  });
+    heroVideo.play().catch(() => {});
+  }
 
   // Nav scroll effect
   const nav = document.getElementById('nav');
