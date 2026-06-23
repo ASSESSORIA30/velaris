@@ -164,6 +164,53 @@
     color: var(--accent);
   }
 
+
+
+  /* LANGUAGE SELECTOR */
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .lang-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    padding: 4px;
+    border: 1px solid rgba(201, 169, 120, 0.32);
+    background: rgba(10, 10, 10, 0.46);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  }
+
+  .lang-option {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: 'Jost', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 8px 10px 8px 12px;
+    line-height: 1;
+    transition: color 0.25s ease, background 0.25s ease;
+  }
+
+  .lang-option:hover,
+  .lang-option.active {
+    color: var(--text);
+    background: rgba(201, 169, 120, 0.14);
+  }
+
+  .lang-divider {
+    width: 1px;
+    height: 14px;
+    background: rgba(201, 169, 120, 0.36);
+  }
+
   /* HERO */
   .hero {
     min-height: 100vh;
@@ -997,6 +1044,9 @@
   @media (max-width: 900px) {
     .container, .container-narrow { padding: 0 24px; }
     nav { padding: 20px 24px; }
+    .nav-actions { gap: 10px; }
+    .lang-option { font-size: 9px; padding: 8px 8px 8px 10px; }
+    .nav-cta { padding: 11px 14px; font-size: 9px; letter-spacing: 0.18em; }
     .hero { padding: 140px 24px 60px; }
     .benefits-grid { grid-template-columns: repeat(2, 1fr); }
     .benefit { border-right: none; }
@@ -1021,7 +1071,14 @@
 
 <nav id="nav">
   <div class="nav-logo">VELARIS</div>
-  <a href="#contacto" class="nav-cta">Iniciar conversación</a>
+  <div class="nav-actions">
+    <div class="lang-switch" aria-label="Selector de idioma">
+      <button type="button" class="lang-option active" data-lang="es" aria-pressed="true">ES</button>
+      <span class="lang-divider" aria-hidden="true"></span>
+      <button type="button" class="lang-option" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <a href="#contacto" class="nav-cta">Iniciar conversación</a>
+  </div>
 </nav>
 
 <main>
@@ -1406,6 +1463,328 @@
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+
+  // Selector de idioma ES / EN
+  const i18n = {
+    es: {
+      navCta: 'Iniciar conversación',
+      heroHeadline: 'Arquitectura para habitar el tiempo.',
+      heroDescription: 'Casas contemporáneas, llave en mano, concebidas con el rigor de un estudio de arquitectura y la precisión de un proceso industrial impecable.',
+      heroCta: 'Iniciar conversación <span>→</span>',
+      heroScroll: 'Desplazar',
+      collectionLabel: 'The Collection',
+      collectionTitle: 'Tres formas de entender<br>el lujo contemporáneo.',
+      collectionSubtitle: 'Residencias concebidas como punto de partida, nunca como límite.',
+      cards: [
+        { title: 'Velaris One', text: 'La villa esencial. Una planta, patio, piscina y arquitectura abierta a la luz mediterránea.' },
+        { title: 'Velaris Horizon', text: 'Una residencia extendida hacia el paisaje, pensada para vivir entre interior, jardín y horizonte.' },
+        { title: 'Velaris Signature', text: 'La expresión más exclusiva de Velaris: arquitectura, paisaje y atmósfera llevados al máximo nivel.' }
+      ],
+      positioningText: 'Velaris diseña y entrega viviendas contemporáneas de alto nivel. Proyectos pensados hasta el último detalle, ejecutados con precisión y entregados completamente terminados.',
+      positioningQuote: 'Una forma, a la vez nueva y muy antigua,<br>de entender el hogar.',
+      imagineLabel: 'Imaginar la casa',
+      imagineTitle: 'Entra temprano la luz.<br><em style="font-family:\'Cormorant Garamond\';font-style:italic;color:var(--accent);">Se queda hasta tarde.</em>',
+      imagineP: [
+        'Grandes paños de vidrio que diluyen la frontera entre interior y jardín. Techos altos. Un salón continuo con la cocina. Madera de roble bajo los pies. Piedra natural en los baños. Una piscina que sigue la línea de la casa.',
+        'Materiales nobles, proporciones medidas y una disciplina compositiva que evita lo decorativo y confía en la claridad.',
+        '<em>Abrir la puerta y no tener que hacer nada más. Solo vivir.</em>'
+      ],
+      benefitsTitle: 'Cuatro principios.<br>Ninguno negociable.',
+      benefitsSubtitle: 'El criterio que atraviesa cada proyecto Velaris.',
+      benefits: [
+        ['Diseño','Arquitectura contemporánea concebida para envejecer bien. Líneas limpias, volúmenes claros y una atención obsesiva a la proporción.'],
+        ['Confort','Espacios generosos, luz natural cuidada y una temperatura estable todo el año. El confort como disciplina, no como añadido.'],
+        ['Eficiencia','Los más altos estándares energéticos europeos. Una casa silenciosa, sostenible y pensada para durar décadas sin perder prestaciones.'],
+        ['Tranquilidad','Un único interlocutor. Un presupuesto cerrado. Una fecha de entrega. La experiencia de encargar una casa sin tener que gestionarla.']
+      ],
+      experienceTitle: 'Una experiencia<br>sin fricción.',
+      experienceSubtitle: 'Del primer encuentro a la entrega de llaves.',
+      steps: [
+        ['Conversación','Nos sentamos a escuchar. Entender el terreno, el clima, la vida que va a ocurrir dentro de la casa. No existen dos proyectos iguales porque no existen dos clientes iguales.'],
+        ['Proyecto','Nuestro equipo de arquitectura dibuja, ajusta y presenta un proyecto cerrado. Planos, materiales, presupuesto y calendario, definidos antes de empezar. Sin sorpresas posteriores.'],
+        ['Construcción','Producción industrializada en condiciones controladas, lejos del ruido, la lluvia y la improvisación de la obra tradicional. Montaje en obra con plazos medidos.'],
+        ['Entrega','La casa se entrega completa, lista para habitar. Acompañamiento durante las primeras semanas y garantía ampliada sobre estructura, instalaciones y acabados.']
+      ],
+      modelLabel: 'Modelo fundacional',
+      modelTagline: 'Una casa en L, abierta al sur, organizada en torno a un patio.',
+      modelText: [
+        'Doscientos metros cuadrados donde todo ocurre con la naturalidad de lo bien pensado. Un salón de cincuenta metros continuos con la cocina, protegido del exterior por grandes ventanales correderos de suelo a techo.',
+        'Una suite principal con vestidor y baño concebido como habitación. Dos o tres dormitorios que reciben luz toda la mañana. Una piscina alargada que acompaña la línea de la casa.'
+      ],
+      specs: ['Superficie','Dormitorios','Salón + cocina','Desde'],
+      turnkeyLabel: 'Llave en mano',
+      includedTitle: 'Todo lo que una casa<br>necesita para ser casa.',
+      includedSubtitle: 'Y nada más.',
+      includedP: [
+        'El proyecto de arquitectura firmado por nuestro estudio. Las licencias y la gestión urbanística. La obra completa, desde la cimentación hasta el último remate. La cocina equipada con electrodomésticos de gama alta. Los baños con grifería y sanitarios seleccionados.',
+        'La carpintería interior y exterior. Los suelos. La iluminación integrada. La domótica. La aerotermia y el suelo radiante. La piscina con su sistema de depuración. El jardín perimetral. Las conexiones a los servicios.',
+        '<em>Y, sobre todo, un único interlocutor durante todo el proceso. Alguien que responde.</em>'
+      ],
+      galleryTitle: 'La casa antes de explicarse.',
+      gallerySubtitle: 'Materia, luz y silencio.',
+      whyLabel: 'Por qué Velaris',
+      whyTitle: 'No es la única forma.<br>Pero es la correcta.',
+      diff: [
+        ['Proyecto de autor','Arquitectura firmada por nuestro estudio, no adaptada de un catálogo genérico. Cada casa responde a su lugar y a quien la va a habitar.'],
+        ['Precio cerrado','Presupuesto detallado antes de empezar, sin capítulos abiertos ni sobrecostes al final. El precio que se firma es el precio que se paga.'],
+        ['Plazo cerrado','Calendario de entrega garantizado desde la firma del proyecto. Construcción industrializada, plazos tres veces más rápidos que la obra tradicional.'],
+        ['Acabados artesanales','Construcción industrial en la estructura, oficio en los acabados. Materiales nobles trabajados con la atención que merece una casa pensada para décadas.'],
+        ['Eficiencia europea','Estándares energéticos al más alto nivel. Aerotermia, suelo radiante, aislamientos de gran rendimiento. Una casa silenciosa, sostenible y económica de mantener.'],
+        ['Una sola interlocución','Un único equipo responsable de todo el proceso, desde el primer plano hasta la entrega de llaves. Sin subcontratistas anónimos, sin responsabilidades diluidas.']
+      ],
+      filterIntro: 'Velaris no es<br><em>para todo el mundo.</em>',
+      filterP: [
+        'Es para quien ha llegado al momento de su vida en el que una casa ya no se elige por metros cuadrados, sino por criterio.',
+        'Para quien entiende que el tiempo es el lujo más escaso y no quiere gastarlo gestionando una obra.',
+        'Para quien sabe distinguir lo que está hecho con oficio de lo que simplemente está terminado.'
+      ],
+      filterClosing: 'Nuestros clientes no nos llegan preguntando cuánto cuesta.<br>Nos llegan preguntando cómo se hace.',
+      ctaEyebrow: 'Siguiente paso',
+      ctaTitle: 'Si ha llegado hasta aquí,<br>probablemente ya lo sepa.',
+      ctaSub: 'Cuéntenos sobre su proyecto. Respondemos personalmente a cada solicitud en un plazo de 48 horas.',
+      formTitle: 'Iniciar conversación',
+      formSubtitle: 'Toda información compartida es estrictamente confidencial.',
+      labels: ['Nombre','Teléfono','Email','Presupuesto aproximado','Dispone de terreno','Mensaje'],
+      placeholders: ['Su nombre completo','+34','su@correo.com','Cuéntenos lo que tenga en mente. Ubicación, tiempos, ideas iniciales, lo que considere relevante.'],
+      budgetOptions: ['Seleccionar rango','400.000 € — 600.000 €','600.000 € — 800.000 €','800.000 € — 1.000.000 €','Más de 1.000.000 €'],
+      landOptions: ['Seleccionar','Sí, ya tengo terreno','En proceso de búsqueda','Aún no'],
+      submit: 'Enviar solicitud →',
+      sending: 'Enviando...',
+      sent: 'Solicitud recibida ✓',
+      error: 'Error al enviar',
+      note: 'Al enviar acepta nuestra política de privacidad y protección de datos.',
+      footerTag: 'Design · Elegance · Exclusivity',
+      footerCompany: 'Velaris es una empresa de <a href="https://www.modulardomgroup.com" target="_blank" rel="noopener noreferrer">MD Group</a>',
+      footerMade: 'Web realizada por <a href="https://www.skytopdigital.com" target="_blank" rel="noopener noreferrer">SkyTop Digital</a>',
+      footerRights: '© 2026 Velaris · Todos los derechos reservados',
+      metaDescription: 'Arquitectura contemporánea llave en mano. Viviendas concebidas con el rigor de un estudio de arquitectura y la precisión de un proceso industrial impecable.'
+    },
+    en: {
+      navCta: 'Start a conversation',
+      heroHeadline: 'Architecture designed to inhabit time.',
+      heroDescription: 'Contemporary turnkey homes conceived with the rigor of an architecture studio and the precision of an impeccable industrial process.',
+      heroCta: 'Start a conversation <span>→</span>',
+      heroScroll: 'Scroll',
+      collectionLabel: 'The Collection',
+      collectionTitle: 'Three ways to understand<br>contemporary luxury.',
+      collectionSubtitle: 'Residences conceived as a starting point, never as a limit.',
+      cards: [
+        { title: 'Velaris One', text: 'The essential villa. One level, patio, pool and architecture open to Mediterranean light.' },
+        { title: 'Velaris Horizon', text: 'A residence extended toward the landscape, designed to live between interior, garden and horizon.' },
+        { title: 'Velaris Signature', text: 'The most exclusive expression of Velaris: architecture, landscape and atmosphere taken to the highest level.' }
+      ],
+      positioningText: 'Velaris designs and delivers high-end contemporary homes. Projects conceived down to the last detail, executed with precision and delivered fully finished.',
+      positioningQuote: 'A way, both new and ancient,<br>of understanding home.',
+      imagineLabel: 'Imagining the house',
+      imagineTitle: 'Light enters early.<br><em style="font-family:\'Cormorant Garamond\';font-style:italic;color:var(--accent);">It stays until late.</em>',
+      imagineP: [
+        'Large panes of glass dissolve the boundary between interior and garden. High ceilings. A continuous living room with the kitchen. Oak wood beneath your feet. Natural stone in the bathrooms. A pool that follows the line of the house.',
+        'Noble materials, measured proportions and a compositional discipline that avoids decoration and trusts in clarity.',
+        '<em>Open the door and have nothing else to do. Just live.</em>'
+      ],
+      benefitsTitle: 'Four principles.<br>None negotiable.',
+      benefitsSubtitle: 'The standard that runs through every Velaris project.',
+      benefits: [
+        ['Design','Contemporary architecture conceived to age beautifully. Clean lines, clear volumes and an obsessive attention to proportion.'],
+        ['Comfort','Generous spaces, carefully planned natural light and a stable temperature all year round. Comfort as a discipline, not an add-on.'],
+        ['Efficiency','The highest European energy standards. A silent, sustainable home designed to last for decades without losing performance.'],
+        ['Peace of mind','One single point of contact. A fixed budget. A delivery date. The experience of commissioning a home without having to manage it.']
+      ],
+      experienceTitle: 'A frictionless<br>experience.',
+      experienceSubtitle: 'From the first meeting to the handover of keys.',
+      steps: [
+        ['Conversation','We sit down to listen. To understand the plot, the climate and the life that will happen inside the house. No two projects are the same because no two clients are the same.'],
+        ['Project','Our architecture team draws, refines and presents a closed project. Plans, materials, budget and calendar defined before starting. No later surprises.'],
+        ['Construction','Industrialized production in controlled conditions, far from the noise, rain and improvisation of traditional construction. On-site assembly with measured timelines.'],
+        ['Handover','The house is delivered complete, ready to live in. Support during the first weeks and extended warranty on structure, installations and finishes.']
+      ],
+      modelLabel: 'Foundational model',
+      modelTagline: 'An L-shaped house, open to the south, arranged around a patio.',
+      modelText: [
+        'Two hundred square meters where everything happens with the naturalness of what has been carefully considered. A fifty-square-meter continuous living area with the kitchen, protected from the exterior by large floor-to-ceiling sliding windows.',
+        'A primary suite with dressing room and bathroom conceived as a room. Two or three bedrooms receiving morning light. An elongated pool that follows the line of the house.'
+      ],
+      specs: ['Surface','Bedrooms','Living + kitchen','From'],
+      turnkeyLabel: 'Turnkey',
+      includedTitle: 'Everything a house<br>needs to become home.',
+      includedSubtitle: 'And nothing more.',
+      includedP: [
+        'The architectural project signed by our studio. Permits and urban planning management. The complete build, from foundations to the final detail. A kitchen equipped with high-end appliances. Bathrooms with selected taps and sanitaryware.',
+        'Interior and exterior carpentry. Flooring. Integrated lighting. Home automation. Aerothermal systems and underfloor heating. The pool with its filtration system. The perimeter garden. Utility connections.',
+        '<em>And above all, a single point of contact throughout the process. Someone who answers.</em>'
+      ],
+      galleryTitle: 'The house before it is explained.',
+      gallerySubtitle: 'Material, light and silence.',
+      whyLabel: 'Why Velaris',
+      whyTitle: 'It is not the only way.<br>But it is the right one.',
+      diff: [
+        ['Author-led project','Architecture signed by our studio, not adapted from a generic catalogue. Each house responds to its place and to those who will inhabit it.'],
+        ['Fixed price','A detailed budget before starting, with no open chapters or final overruns. The price signed is the price paid.'],
+        ['Fixed timeline','A guaranteed delivery schedule from project signature. Industrialized construction, with timelines up to three times faster than traditional building.'],
+        ['Crafted finishes','Industrial construction in the structure, craftsmanship in the finishes. Noble materials treated with the attention a home for decades deserves.'],
+        ['European efficiency','Top-level energy standards. Aerothermal systems, underfloor heating and high-performance insulation. A quiet, sustainable home that is economical to maintain.'],
+        ['One single interlocutor','One team responsible for the entire process, from the first plan to the handover of keys. No anonymous subcontractors, no diluted responsibilities.']
+      ],
+      filterIntro: 'Velaris is not<br><em>for everyone.</em>',
+      filterP: [
+        'It is for those who have reached the moment in life when a house is no longer chosen by square meters, but by criteria.',
+        'For those who understand that time is the scarcest luxury and do not want to spend it managing a build.',
+        'For those who can distinguish what is made with craft from what is simply finished.'
+      ],
+      filterClosing: 'Our clients do not come to us asking how much it costs.<br>They come asking how it is done.',
+      ctaEyebrow: 'Next step',
+      ctaTitle: 'If you have reached this point,<br>you probably already know.',
+      ctaSub: 'Tell us about your project. We respond personally to every request within 48 hours.',
+      formTitle: 'Start a conversation',
+      formSubtitle: 'All shared information is strictly confidential.',
+      labels: ['Name','Phone','Email','Approximate budget','Do you have a plot?','Message'],
+      placeholders: ['Your full name','+34','your@email.com','Tell us what you have in mind. Location, timing, initial ideas, anything you consider relevant.'],
+      budgetOptions: ['Select range','€400,000 — €600,000','€600,000 — €800,000','€800,000 — €1,000,000','More than €1,000,000'],
+      landOptions: ['Select','Yes, I already have a plot','Currently searching','Not yet'],
+      submit: 'Send request →',
+      sending: 'Sending...',
+      sent: 'Request received ✓',
+      error: 'Error sending',
+      note: 'By submitting, you accept our privacy and data protection policy.',
+      footerTag: 'Design · Elegance · Exclusivity',
+      footerCompany: 'Velaris is a company of <a href="https://www.modulardomgroup.com" target="_blank" rel="noopener noreferrer">MD Group</a>',
+      footerMade: 'Website created by <a href="https://www.skytopdigital.com" target="_blank" rel="noopener noreferrer">SkyTop Digital</a>',
+      footerRights: '© 2026 Velaris · All rights reserved',
+      metaDescription: 'Turnkey contemporary architecture. Homes conceived with the rigor of an architecture studio and the precision of an impeccable industrial process.'
+    }
+  };
+
+  function setHTML(selector, value) { const el = document.querySelector(selector); if (el) el.innerHTML = value; }
+  function setText(selector, value) { const el = document.querySelector(selector); if (el) el.textContent = value; }
+  function setAll(selector, values, fn) { document.querySelectorAll(selector).forEach((el, i) => { if (values[i] !== undefined) fn(el, values[i], i); }); }
+
+  function applyLanguage(lang) {
+    const t = i18n[lang] || i18n.es;
+    document.documentElement.lang = lang;
+    document.title = lang === 'en' ? 'VELARIS — Luxury Homes' : 'VELARIS — Luxury Homes';
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) metaDescription.setAttribute('content', t.metaDescription);
+
+    setText('.nav-cta', t.navCta);
+    setText('.hero-headline', t.heroHeadline);
+    setText('.hero-description', t.heroDescription);
+    setHTML('.hero-cta', t.heroCta);
+    setText('.hero-scroll', t.heroScroll);
+
+    setAll('.collection .section-label.ui', [t.collectionLabel, t.galleryLabel || 'Gallery'], (el, val) => el.textContent = val);
+    setHTML('.collection .collection-title', t.collectionTitle);
+    setText('.collection .collection-subtitle', t.collectionSubtitle);
+    document.querySelectorAll('.collection-card').forEach((card, i) => {
+      const item = t.cards[i];
+      if (!item) return;
+      const h3 = card.querySelector('h3');
+      const p = card.querySelector('p');
+      if (h3) h3.textContent = item.title;
+      if (p) p.textContent = item.text;
+    });
+
+    setText('.positioning-text', t.positioningText);
+    setHTML('.positioning-quote', t.positioningQuote);
+    setText('.image-product .section-label.ui', t.imagineLabel);
+    setHTML('.image-product h2', t.imagineTitle);
+    setAll('.image-product p', t.imagineP, (el, val) => el.innerHTML = val);
+
+    setHTML('.benefits-title', t.benefitsTitle);
+    setText('.benefits-subtitle', t.benefitsSubtitle);
+    document.querySelectorAll('.benefit').forEach((benefit, i) => {
+      const item = t.benefits[i];
+      if (!item) return;
+      const h3 = benefit.querySelector('.benefit-title');
+      const p = benefit.querySelector('.benefit-text');
+      if (h3) h3.textContent = item[0];
+      if (p) p.textContent = item[1];
+    });
+
+    setHTML('.experience-title', t.experienceTitle);
+    setText('.experience-subtitle', t.experienceSubtitle);
+    document.querySelectorAll('.step').forEach((step, i) => {
+      const item = t.steps[i];
+      if (!item) return;
+      const h3 = step.querySelector('h3');
+      const p = step.querySelector('p');
+      if (h3) h3.textContent = item[0];
+      if (p) p.textContent = item[1];
+    });
+
+    setText('.model-label', t.modelLabel);
+    setText('.model-tagline', t.modelTagline);
+    setAll('.model-text', t.modelText, (el, val) => el.textContent = val);
+    setAll('.spec-label', t.specs, (el, val) => el.textContent = val);
+
+    setText('.included .section-label.ui', t.turnkeyLabel);
+    setHTML('.included-title', t.includedTitle);
+    setText('.included-subtitle', t.includedSubtitle);
+    setAll('.included-prose p', t.includedP, (el, val) => el.innerHTML = val);
+
+    const galleryHeader = document.querySelector('.gallery .collection-header');
+    if (galleryHeader) {
+      const label = galleryHeader.querySelector('.section-label.ui');
+      const title = galleryHeader.querySelector('.collection-title');
+      const subtitle = galleryHeader.querySelector('.collection-subtitle');
+      if (label) label.textContent = 'Gallery';
+      if (title) title.textContent = t.galleryTitle;
+      if (subtitle) subtitle.textContent = t.gallerySubtitle;
+    }
+
+    setText('.differentiation .section-label.ui', t.whyLabel);
+    setHTML('.diff-title', t.whyTitle);
+    document.querySelectorAll('.diff-item').forEach((itemEl, i) => {
+      const item = t.diff[i];
+      if (!item) return;
+      const h4 = itemEl.querySelector('h4');
+      const p = itemEl.querySelector('p');
+      if (h4) h4.textContent = item[0];
+      if (p) p.textContent = item[1];
+    });
+
+    setHTML('.filter-intro', t.filterIntro);
+    setAll('.filter-text p', t.filterP, (el, val) => el.textContent = val);
+    setHTML('.filter-closing', t.filterClosing);
+
+    setText('.cta-eyebrow', t.ctaEyebrow);
+    setHTML('.cta-title', t.ctaTitle);
+    setText('.cta-sub', t.ctaSub);
+    setText('.form-title', t.formTitle);
+    setText('.form-subtitle', t.formSubtitle);
+    setAll('.field label', t.labels, (el, val) => el.textContent = val);
+
+    const inputs = document.querySelectorAll('input, textarea');
+    [inputs[0], inputs[1], inputs[2], inputs[3]].forEach((input, i) => {
+      if (input) input.setAttribute('placeholder', t.placeholders[i]);
+    });
+
+    const budgetSelect = document.querySelector('select[name="presupuesto"]');
+    if (budgetSelect) Array.from(budgetSelect.options).forEach((option, i) => { if (t.budgetOptions[i]) option.textContent = t.budgetOptions[i]; });
+    const landSelect = document.querySelector('select[name="terreno"]');
+    if (landSelect) Array.from(landSelect.options).forEach((option, i) => { if (t.landOptions[i]) option.textContent = t.landOptions[i]; });
+
+    setText('button[type="submit"] span', t.submit);
+    setText('.form-note', t.note);
+    setText('.footer-tag', t.footerTag);
+    const footerMeta = document.querySelectorAll('.footer-meta');
+    if (footerMeta[0]) footerMeta[0].innerHTML = t.footerCompany;
+    if (footerMeta[1]) footerMeta[1].innerHTML = t.footerMade;
+    if (footerMeta[2]) footerMeta[2].innerHTML = t.footerRights;
+
+    document.querySelectorAll('.lang-option').forEach(button => {
+      const active = button.dataset.lang === lang;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    localStorage.setItem('velaris-lang', lang);
+  }
+
+  document.querySelectorAll('.lang-option').forEach(button => {
+    button.addEventListener('click', () => applyLanguage(button.dataset.lang));
+  });
+
+  applyLanguage(localStorage.getItem('velaris-lang') || 'es');
+
   // Form: enviar a Formspree sin salir de la web
   const velarisForm = document.getElementById('velaris-form');
 
@@ -1416,11 +1795,13 @@
       const form = e.target;
       const button = form.querySelector('button[type="submit"]');
       const btnText = button.querySelector('span');
-      const originalText = btnText.textContent;
+      const currentLang = localStorage.getItem('velaris-lang') || document.documentElement.lang || 'es';
+      const messages = i18n[currentLang] || i18n.es;
+      const originalText = messages.submit;
       const formData = new FormData(form);
 
       button.disabled = true;
-      btnText.textContent = 'Enviando...';
+      btnText.textContent = messages.sending;
 
       try {
         const response = await fetch(form.action, {
@@ -1430,7 +1811,7 @@
         });
 
         if (response.ok) {
-          btnText.textContent = 'Solicitud recibida ✓';
+          btnText.textContent = messages.sent;
           form.reset();
 
           setTimeout(() => {
@@ -1438,14 +1819,14 @@
             button.disabled = false;
           }, 3000);
         } else {
-          btnText.textContent = 'Error al enviar';
+          btnText.textContent = messages.error;
           setTimeout(() => {
             btnText.textContent = originalText;
             button.disabled = false;
           }, 3000);
         }
       } catch (error) {
-        btnText.textContent = 'Error al enviar';
+        btnText.textContent = messages.error;
         setTimeout(() => {
           btnText.textContent = originalText;
           button.disabled = false;
