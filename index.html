@@ -870,20 +870,161 @@
     font-family: 'Cormorant Garamond', serif;
   }
 
-  .field select {
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3e%3cpath fill='none' stroke='%23c9a978' stroke-width='1' d='M1 1l4 4 4-4'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 0 center;
-    background-size: 10px;
-    padding-right: 24px;
+  .field select.native-select {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: 0;
   }
 
-  .field select option { background: var(--bg-alt); color: var(--text); }
+  .custom-select {
+    position: relative;
+  }
+
+  .custom-select-trigger {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 300;
+    padding: 12px 34px 12px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    cursor: pointer;
+    transition: border-color 0.3s ease, color 0.3s ease;
+    text-align: left;
+  }
+
+  .custom-select-trigger:focus-visible {
+    outline: none;
+    border-bottom-color: var(--accent);
+  }
+
+  .custom-select-value.placeholder {
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .custom-select-icon {
+    width: 12px;
+    height: 12px;
+    flex: 0 0 12px;
+    position: relative;
+  }
+
+  .custom-select-icon::before,
+  .custom-select-icon::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    width: 7px;
+    height: 1px;
+    background: var(--accent);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .custom-select-icon::before {
+    left: 0;
+    transform: rotate(45deg);
+    transform-origin: left center;
+  }
+
+  .custom-select-icon::after {
+    right: 0;
+    transform: rotate(-45deg);
+    transform-origin: right center;
+  }
+
+  .custom-select.open .custom-select-trigger {
+    border-bottom-color: var(--accent);
+  }
+
+  .custom-select.open .custom-select-icon::before {
+    transform: rotate(-45deg);
+  }
+
+  .custom-select.open .custom-select-icon::after {
+    transform: rotate(45deg);
+  }
+
+  .custom-select-menu {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 0;
+    width: 100%;
+    background: linear-gradient(180deg, rgba(24,18,15,0.98) 0%, rgba(12,9,8,0.98) 100%);
+    border: 1px solid rgba(201,169,120,0.38);
+    border-radius: 18px;
+    padding: 10px;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.38);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+    z-index: 30;
+  }
+
+  .custom-select.open .custom-select-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .custom-select-option {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.2;
+    text-align: left;
+    padding: 13px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  }
+
+  .custom-select-option:hover,
+  .custom-select-option:focus-visible,
+  .custom-select-option.selected {
+    background: rgba(201,169,120,0.10);
+    color: #f8f2e8;
+    outline: none;
+  }
+
+  .custom-select-option:hover {
+    transform: translateX(2px);
+  }
+
+  .custom-select-option.selected::after {
+    content: '✓';
+    color: var(--accent);
+    font-size: 13px;
+    font-family: 'Jost', sans-serif;
+  }
+
+  .custom-select-option.placeholder-option {
+    color: var(--text-dim);
+    font-style: italic;
+  }
 
   .field input:focus,
-  .field select:focus,
   .field textarea:focus {
     outline: none;
     border-bottom-color: var(--accent);
@@ -1657,6 +1798,111 @@
   function setHTML(selector, value) { const el = document.querySelector(selector); if (el) el.innerHTML = value; }
   function setText(selector, value) { const el = document.querySelector(selector); if (el) el.textContent = value; }
   function setAll(selector, values, fn) { document.querySelectorAll(selector).forEach((el, i) => { if (values[i] !== undefined) fn(el, values[i], i); }); }
+  function closeCustomSelects(except = null) {
+    document.querySelectorAll('.custom-select.open').forEach(selectEl => {
+      if (selectEl !== except) {
+        selectEl.classList.remove('open');
+        const trigger = selectEl.querySelector('.custom-select-trigger');
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  function syncCustomSelect(select) {
+    const wrapper = select.nextElementSibling;
+    if (!wrapper || !wrapper.classList.contains('custom-select')) return;
+
+    const valueEl = wrapper.querySelector('.custom-select-value');
+    const menu = wrapper.querySelector('.custom-select-menu');
+    const currentValue = select.value;
+    const selectedOption = select.options[select.selectedIndex] || select.options[0];
+
+    if (valueEl && selectedOption) {
+      valueEl.textContent = selectedOption.textContent;
+      valueEl.classList.toggle('placeholder', !currentValue);
+    }
+
+    if (menu) {
+      menu.innerHTML = '';
+      Array.from(select.options).forEach((option, index) => {
+        const optionButton = document.createElement('button');
+        optionButton.type = 'button';
+        optionButton.className = 'custom-select-option';
+        if (index === 0 && !option.value) optionButton.classList.add('placeholder-option');
+        if (option.value === currentValue || (!currentValue && index === 0)) optionButton.classList.add('selected');
+        optionButton.dataset.value = option.value;
+        optionButton.textContent = option.textContent;
+        optionButton.addEventListener('click', () => {
+          select.value = option.value;
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+          syncCustomSelect(select);
+          closeCustomSelects();
+        });
+        menu.appendChild(optionButton);
+      });
+    }
+  }
+
+  function buildCustomSelect(select) {
+    if (!select || select.dataset.customReady === 'true') {
+      if (select) syncCustomSelect(select);
+      return;
+    }
+
+    select.classList.add('native-select');
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'custom-select';
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'custom-select-trigger';
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', 'false');
+
+    const value = document.createElement('span');
+    value.className = 'custom-select-value';
+
+    const icon = document.createElement('span');
+    icon.className = 'custom-select-icon';
+    icon.setAttribute('aria-hidden', 'true');
+
+    trigger.appendChild(value);
+    trigger.appendChild(icon);
+
+    const menu = document.createElement('div');
+    menu.className = 'custom-select-menu';
+    menu.setAttribute('role', 'listbox');
+
+    wrapper.appendChild(trigger);
+    wrapper.appendChild(menu);
+    select.insertAdjacentElement('afterend', wrapper);
+
+    trigger.addEventListener('click', () => {
+      const isOpen = wrapper.classList.contains('open');
+      closeCustomSelects(wrapper);
+      wrapper.classList.toggle('open', !isOpen);
+      trigger.setAttribute('aria-expanded', !isOpen ? 'true' : 'false');
+    });
+
+    select.addEventListener('change', () => syncCustomSelect(select));
+    select.dataset.customReady = 'true';
+    syncCustomSelect(select);
+  }
+
+  function refreshCustomSelects() {
+    document.querySelectorAll('.field select').forEach(select => buildCustomSelect(select));
+    document.querySelectorAll('.field select').forEach(select => syncCustomSelect(select));
+  }
+
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.custom-select')) closeCustomSelects();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeCustomSelects();
+  });
+
 
   function applyLanguage(lang) {
     const t = i18n[lang] || i18n.es;
@@ -1762,6 +2008,7 @@
     if (budgetSelect) Array.from(budgetSelect.options).forEach((option, i) => { if (t.budgetOptions[i]) option.textContent = t.budgetOptions[i]; });
     const landSelect = document.querySelector('select[name="terreno"]');
     if (landSelect) Array.from(landSelect.options).forEach((option, i) => { if (t.landOptions[i]) option.textContent = t.landOptions[i]; });
+    refreshCustomSelects();
 
     setText('button[type="submit"] span', t.submit);
     setText('.form-note', t.note);
@@ -1783,6 +2030,7 @@
     button.addEventListener('click', () => applyLanguage(button.dataset.lang));
   });
 
+  refreshCustomSelects();
   applyLanguage(localStorage.getItem('velaris-lang') || 'es');
 
   // Form: enviar a Formspree sin salir de la web
@@ -1813,6 +2061,7 @@
         if (response.ok) {
           btnText.textContent = messages.sent;
           form.reset();
+          refreshCustomSelects();
 
           setTimeout(() => {
             btnText.textContent = originalText;
